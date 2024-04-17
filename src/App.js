@@ -75,6 +75,40 @@ function App() {
     }
   };
 
+  const handleUpdateRecipe = async (e, selectedRecipe) => {
+    e.preventDefault();
+    const { id } = selectedRecipe;
+    try {
+      const response = await fetch(`/api/recipes/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(selectedRecipe),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setRecipes(
+          recipes.map((recipe) => {
+            if (recipe.id === id) {
+              // Return the saved data from the db
+              return data.recipe;
+            }
+            return recipe;
+          })
+        );
+        console.log("Recipe updated!");
+      } else {
+        console.error("Failed to update recipe. Please try again.");
+      }
+    } catch (error) {
+      console.error("An unexpected error occurred. Please try again later.");
+    }
+
+    setSelectedRecipe(null);
+  };
+
   const handleSelectRecipe = (recipe) => {
     setSelectedRecipe(recipe);
   };
@@ -92,9 +126,13 @@ function App() {
     setSelectedRecipe(null);
   };
 
-  const onUpdateForm = (e) => {
+  const onUpdateForm = (e, action = "new") => {
     const { name, value } = e.target;
-    setNewRecipe({ ...newRecipe, [name]: value });
+    if (action === "update") {
+      setSelectedRecipe({ ...selectedRecipe, [name]: value });
+    } else {
+      setNewRecipe({ ...newRecipe, [name]: value });
+    }
   };
 
   return (
@@ -112,6 +150,8 @@ function App() {
         <RecipeFull
           selectedRecipe={selectedRecipe}
           handleUnselectRecipe={handleUnselectRecipe}
+          onUpdateForm={onUpdateForm}
+          handleUpdateRecipe={handleUpdateRecipe}
         />
       )}
       {!selectedRecipe && !showNewRecipeForm && (
