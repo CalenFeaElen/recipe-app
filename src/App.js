@@ -28,7 +28,7 @@ function App() {
   useEffect(() => {
     const fetchAllRecipes = async () => {
       try {
-        const response = await fetch("/api/recipes");
+        const response = await fetch("./public/recipes");
         if (response.ok) {
           const data = await response.json();
           setRecipes(data);
@@ -49,7 +49,7 @@ function App() {
     e.preventDefault();
 
     try {
-      const response = await fetch("/api/recipes", {
+      const response = await fetch("./public/recipes", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,7 +91,7 @@ function App() {
     const { id } = selectedRecipe;
 
     try {
-      const response = await fetch(`/api/recipes/${id}`, {
+      const response = await fetch(`./public/recipes/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -127,7 +127,7 @@ function App() {
 
   const handleDeleteRecipe = async (recipeId) => {
     try {
-      const response = await fetch(`/api/recipes/${selectedRecipe.id}`, {
+      const response = await fetch(`./public/recipes/${selectedRecipe.id}`, {
         method: "DELETE",
       });
 

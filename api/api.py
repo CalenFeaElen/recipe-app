@@ -26,7 +26,7 @@ with app.app_context():
     db.session.commit()
 
 # Route to fetch all recipes
-@app.route('/api/recipes', methods=['GET'])
+@app.route('/public/recipes', methods=['GET'])
 def get_all_recipes():
     recipes = Recipe.query.all()
     recipe_list = []
@@ -43,7 +43,7 @@ def get_all_recipes():
     return jsonify(recipe_list)
 
 # Route to add a new recipe
-@app.route('/api/recipes', methods=['POST'])
+@app.route('/public/recipes', methods=['POST'])
 def add_recipe():
     data = request.get_json()
     # Validate the incoming JSON data for required fields
@@ -80,7 +80,7 @@ def add_recipe():
     return jsonify({'message': 'Recipe added successfully', 'recipe': new_recipe_data})
 
 # Route to update a recipe
-@app.route('/api/recipes/<int:recipe_id>', methods=['PUT'])
+@app.route('/public/recipes/<int:recipe_id>', methods=['PUT'])
 def update_recipe(recipe_id):
     recipe = Recipe.query.get(recipe_id)
     if not recipe:
@@ -118,7 +118,7 @@ def update_recipe(recipe_id):
     return jsonify({'message': 'Recipe updated successfully', 'recipe': updated_recipe})
 
 #Route to delete a recipe
-@app.route('/api/recipes/<int:recipe_id>', methods=['DELETE'])
+@app.route('/public/recipes/<int:recipe_id>', methods=['DELETE'])
 def delete_recipe(recipe_id):
     recipe=Recipe.query.get(recipe_id)
     if not recipe:
