@@ -1,25 +1,40 @@
 import React, { useState } from "react";
-import { X } from "react-feather";
 import EditRecipeForm from "./EditRecipeForm";
+import ConfirmationModal from "./ConfirmationModal";
+import { X } from "react-feather";
 
 const RecipeFull = ({
   selectedRecipe,
   handleUnselectRecipe,
   onUpdateForm,
   handleUpdateRecipe,
+  handleDeleteRecipe,
 }) => {
   const [editing, setEditing] = useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+
   const handleCancel = () => {
     setEditing(false);
   };
 
+  if (showConfirmationModal) {
+    return (
+      <div className="recipe-details">
+        <ConfirmationModal
+          message="Are you sure? Once it's gone, it's gone."
+          onCancel={() => setShowConfirmationModal(false)}
+          onConfirm={() => handleDeleteRecipe(selectedRecipe.id)}
+        />
+      </div>
+    );
+  }
   return (
     <div className="recipe-details">
       {editing ? (
         <EditRecipeForm
           selectedRecipe={selectedRecipe}
-          handleCancel={handleCancel}
           onUpdateForm={onUpdateForm}
+          handleCancel={handleCancel}
           handleUpdateRecipe={handleUpdateRecipe}
         />
       ) : (
@@ -33,10 +48,18 @@ const RecipeFull = ({
               <button className="edit-button" onClick={() => setEditing(true)}>
                 Edit
               </button>
-              <button className="cancel-button" onClick={handleUnselectRecipe}>
+              <button
+                className="cancel-button"
+                onClick={() => handleUnselectRecipe(selectedRecipe)}
+              >
                 <X /> Close
               </button>
-              <button className="delete-button">Delete</button>
+              <button
+                className="delete-button"
+                onClick={() => setShowConfirmationModal(true)}
+              >
+                Delete
+              </button>
             </div>
           </header>
 
